@@ -17,13 +17,41 @@ std::vector<arm_pose> arm_control;
 void RobotArm::test() {
     ROS_INFO("arm begin testen");
     int temp_index = 
-    add_arm_pose(RED_X, RED_Y, -1, CIRCULAR_BLUE_CAM_ANGLE, 0);
-    add_arm_pose(RED_X, RED_Y, -60, CIRCULAR_BLUE_CAM_ANGLE, 1);
-    add_arm_pose(RED_X, RED_Y, -1, CIRCULAR_BLUE_CAM_ANGLE, 0);
 
-    add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -1, CIRCULAR_RED_CAM_ANGLE, 1);
-    add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -150, CIRCULAR_RED_CAM_ANGLE, 0);
-    add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -1, CIRCULAR_RED_CAM_ANGLE, 1);
+    
+    // add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    // add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    // add_arm_pose(RED_X, RED_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_OPEN);
+    // add_arm_pose(RED_X, RED_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_CLOSE);
+    // add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_CLOSE);
+    //  add_arm_pose(RED_X, RED_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_CLOSE);
+
+    // add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_OPEN);
+    // add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_OPEN);
+    // add_arm_pose(GREEN_X, GREEN_Y, TEKEUP_HEIGHT, CAM_ANGLE_GREEN, PAW_OPEN);
+    // add_arm_pose(GREEN_X, GREEN_Y, TEKEUP_HEIGHT, CAM_ANGLE_GREEN, PAW_CLOSE);
+    // add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_CLOSE);
+    // add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -150, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+    // add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -150, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+    //add_arm_pose(GREEN_X, GREEN_Y, TEKEUP_HEIGHT, CAM_ANGLE_GREEN, PAW_CLOSE);
+
+    //add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_BLUE, PAW_OPEN);
+    // add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_GREEN, PAW_OPEN);
+    // add_arm_pose(BULE_X, BULE_Y, TEKEUP_HEIGHT, CAM_ANGLE_GREEN, PAW_OPEN);
+    // add_arm_pose(BULE_X, BULE_Y, TEKEUP_HEIGHT, CAM_ANGLE_GREEN, PAW_CLOSE);
+    // add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_GREEN, PAW_CLOSE);
+    // add_arm_pose(BULE_X, BULE_Y, TEKEUP_HEIGHT, CAM_ANGLE_GREEN, PAW_CLOSE);
+
+    add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -150, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+
+
+
+    //add_arm_pose(RED_X, RED_Y, -3, CIRCULAR_BLUE_CAM_ANGLE, PAW_OPEN);
+    //add_arm_pose(RED_X, RED_Y, -1, CIRCULAR_BLUE_CAM_ANGLE, PAW_OPEN);
+
+    //add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+    //add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -150, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+    //add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
 
     do {
         //if (arm_arrived(arm_control[temp_index])){

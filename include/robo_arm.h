@@ -21,20 +21,20 @@
 #define INIT_POSE_CAM 0
 
 
-#define RED_X 99.5 //红色方块在车上的x坐标
-#define RED_Y 106
-#define CAM_ANGLE_RED 2.355 
-#define GREEN_X 99.5
-#define GREEN_Y 199
-#define CAM_ANGLE_GREEN 2.355
-#define BULE_X -25
-#define BULE_Y 199-30
+#define RED_X 99.5 + 36 //红色方块在车上的x坐标
+#define RED_Y 106 - 30 //ok
+#define CAM_ANGLE_RED 3.1415//ok 
+#define GREEN_X 99.5 + 30//ok
+#define GREEN_Y 199 - 26//ok
+#define CAM_ANGLE_GREEN 2.955//ok
+#define BULE_X -20
+#define BULE_Y 199-60
 #define CAM_ANGLE_BLUE 3.1415
 #define CAR_HIGHT 0.2 //快在车上的高度
-#define TEKEUP_HEIGHT 0.5 //从车上拿起的高度
+#define TEKEUP_HEIGHT -61 //从车上拿起的高度
 
-#define CIRCULAR_RED_X -60 //圆相对与车的x坐标
-#define CIRCULAR_RED_Y -180
+#define CIRCULAR_RED_X 0 //圆相对与车的x坐标
+#define CIRCULAR_RED_Y -200
 #define CIRCULAR_RED_CAM_ANGLE 3.1415 + 0.3
 #define CIRCULAR_GREEN_X -210
 #define CIRCULAR_GREEN_Y -180
