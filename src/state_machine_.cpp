@@ -19,12 +19,13 @@ nav_msgs::Odometry set_target_pose;
 int set_tar_pose_index = 0;
 float set_tar_yaw = 0;
 float eg = 0;
-
+bool add_flag = 0;
+int move_index;
 
 
 void move(int index){
     
-    while (index < set_tar_poses.size() && ros::ok()) {
+    
         set_target_pose.pose.pose.position.x = set_tar_poses[index].x;
         set_target_pose.pose.pose.position.y = set_tar_poses[index].y;
         ROS_INFO("set_target_pose.pose.pose.position: (%.2f, %.2f)", set_target_pose.pose.pose.position.x, set_target_pose.pose.pose.position.y);
@@ -38,32 +39,45 @@ void move(int index){
         //target_pose.pose.pose.position.x-=0.5;
         
         //ROS_INFO("x=%.2f,y=%.2f,z=%.2f",cur_pose.pose.pose.position.x,cur_pose.pose.pose.position.y,cur_pose.pose.pose.position.z);
-        double x_error = set_target_pose.pose.pose.position.x - cur_pose.pose.pose.position.x;
-        double y_error = set_target_pose.pose.pose.position.y - cur_pose.pose.pose.position.y;
-        //ROS_INFO("error_y:%d",cur_pose_is_ok);
-        ROS_INFO("index:%d",index); 
-        if(cur_pose_is_ok == 1){
-            if(fabs(x_error)<0.05 && fabs(y_error)<0.05 && yaw_is_ok == 1){
-                yaw_is_ok = 0;
-                ROS_INFO("arrived!");
-                if(index < set_tar_poses.size() - 1) {
-                    index ++;
-                }
-            //currentState = State::COMPLETE;
-            }
+        // double x_error = set_target_pose.pose.pose.position.x - cur_pose.pose.pose.position.x;
+        // double y_error = set_target_pose.pose.pose.position.y - cur_pose.pose.pose.position.y;
+        // //ROS_INFO("error_y:%d",cur_pose_is_ok);
+        // ROS_INFO("index:%d",index); 
+        // if(cur_pose_is_ok == 1){
+        //     if(fabs(x_error)<0.05 && fabs(y_error)<0.05 && yaw_is_ok == 1){
+        //         yaw_is_ok = 0;
+        //         ROS_INFO("arrived!");
+        //         if(index < set_tar_poses.size() - 1) {
+        //             index ++;
+        //         }
+        //     //currentState = State::COMPLETE;
+        //     }
         // ROS_INFO("x=%.2f,y=%.2f,z=%.2f",
         // target_pose.pose.pose.position.x,target_pose.pose.pose.position.y,target_pose.pose.pose.position.z);
         //target_pose.pose.pose.orientation = cur_pose.pose.pose.orientation;
-        }
-        ros::spinOnce();
-    }
+        // }
+   
+}
+
+bool car_arrive (int index) {
+    nav_msgs::Odometry temp_pose;
+    temp_pose.pose.pose.position.x = set_tar_poses[index].x;
+    temp_pose.pose.pose.position.y = set_tar_poses[index].y;
+    double x_error = temp_pose.pose.pose.position.x - cur_pose.pose.pose.position.x;
+    double y_error = temp_pose.pose.pose.position.y - cur_pose.pose.pose.position.y;
+    if(fabs(x_error)<0.03 && fabs(y_error)<0.03 && yaw_is_ok == 1){
+                yaw_is_ok = 0;
+                ROS_INFO("arrived!");
+                return 1;
+            //currentState = State::COMPLETE;
+    } else return 0;
 }
 
 void RobotFSM::processEvent(Event event) {
     nav_msgs::Odometry return_value;
     switch (currentState) {
         case State::INIT:
-            handleInit(event);//首先执行这个，用于检查机器状态
+            handleInit(event);//1、用于检查机器状态
             break;
         case State::READ_QR_CODE:
             handleReadQRCode(event);
@@ -72,10 +86,10 @@ void RobotFSM::processEvent(Event event) {
             handleFetchFirstBatch(event);
             break;
         case State::DELIVER_TO_PROCESSING:
-            handleDeliverToProcessing(event);//然后执行这个，开到粗加工区
+            handleDeliverToProcessing(event);//2、开到粗加工区
             break;
         case State::STORE_FIRST_BATCH:
-            handleStoreFirstBatch(event);//最后执行这个，放置物体
+            handleStoreFirstBatch(event);//4、放置物体
             break;
         case State::FETCH_SECOND_BATCH:
             handleFetchSecondBatch(event);
@@ -89,11 +103,14 @@ void RobotFSM::processEvent(Event event) {
         case State::COMPLETE:
             handleComplete(event);
             break;
-        case State::TEST:
-            handleTest(event);
-            break;
-        case State::TEST_VISION:
+        case State::LOOKING_FOR_CIRCLE://3、找圆
             handleTest_vision(event);
+            break;
+        case State::MOVE_GREEN:
+            handle_move_green();
+            break;
+        case State::MOVE_BLUE:
+            handle_move_blue();
             break;
         }
 }
@@ -104,24 +121,109 @@ void RobotFSM::processEvent(Event event) {
 // }
 
 void RobotFSM::handleTest(Event event){
+    static int move_index;
+    static int add_flag = 0;
+
     robot_arm_.test();
+
+
+    // if (add_flag != 1) {
+    // move_index = add_tar_pose(1.85, -0.29, 0);
+    // add_tar_pose(1.88,-0.92,0);
+
+    // // add_tar_pose(1.85,-1.88,0);
+    // // add_tar_pose(1.64,-1.81,-3.1415/2);
+    // // add_tar_pose(0.98,-1.84,-3.1415/2);
+    // // add_tar_pose(0.98,-1.84,-3.1415/2);
+    // // add_tar_pose(0.84,-1.78,-3.1415/2);
+    // // add_tar_pose(0.84,-1.6,-3.1415/2);
+    // //  add_tar_pose(0.84,-1,-3.1415/2);
+    // // add_tar_pose(0.88,-0.16,-3.1415/2);
+    // // add_tar_pose(0.2,-0.2,-3.1415/2);
+    // // add_tar_pose(0.2,-0.2,0);
+    // // add_tar_pose(0,-0,0);
+
+    // // add_flag = 1;
+    // }
+    // //add_tar_pose(0.2,0.2, 3.1415);//TODO 输入正确的坐标
+    // move(move_index);
+    // ROS_INFO("move_index: %d", move_index);
+    // if (car_arrive(move_index)) {
+    //     move_index ++;
+    //     ROS_INFO("move_index: %d", move_index);
+    // } 
+    // if(move_index == set_tar_poses.size()) {
+    //     add_flag = 0;
+    //     //currentState = State::STORE_FIRST_BATCH;
+    //     ROS_INFO("test finish!");
+    // }
+}
+void RobotFSM::handle_move_green(){
+    static int move_index;
+    static int add_flag = 0;
+    robot_arm_.handle_move_green();
+    currentState = State::LOOKING_FOR_CIRCLE;
 }
 
+void RobotFSM::handle_move_blue(){
+    static int move_index;
+    static int add_flag = 0;
+    robot_arm_.handle_move_blue();
+    currentState = State::LOOKING_FOR_CIRCLE;
+}
+
+
 void RobotFSM::handleTest_vision(Event event){
+    static int found_color = 0;
+    static int arm_ctrl = 0;
+    if(found_color == 1){
+        arm_ctrl = 1;
+    }
+    if(found_color == 2){
+        arm_ctrl = 2;
+    }
+    if(found_color == 3){
+        arm_ctrl = 3;
+    }
+    ROS_INFO("color_found = %d",arm_ctrl);
+    switch (arm_ctrl) {
+        case 0:
+            found_color =robot_arm_.test_vision('r');
+            if(found_color == 1){
+                currentState = State::MOVE_BLUE;
+            }
+        break;
+        case 1:
+            found_color =robot_arm_.test_vision('b');
+            if(found_color == 2){
+                currentState = State::MOVE_GREEN;
+            }
+        break;
+        case 2:
+            arm_ctrl =robot_arm_.test_vision('g');
+            currentState = State::STORE_FIRST_BATCH;
+        break;
+        case 3:
+        break;
+    
+    }
     
 }
 
 void RobotFSM::handleInit(Event event){
-    ROS_INFO("MISSION_START!");
-    //while(cur_pose.pose.pose.position.x == 0);
-    //{
-        ROS_INFO("Waiting for SLAM to initialize...");
-    //}
-    ROS_INFO("Slam init finished!");//雷达完成初始化
-    ROS_INFO("Init finished!");
+    // ROS_INFO("MISSION_START!");
+    // //while(cur_pose.pose.pose.position.x == 0);
+    // //{
+    //     ROS_INFO("Waiting for SLAM to initialize...");
+    // //}
+    // ROS_INFO("Slam init finished!");//雷达完成初始化
+    // ROS_INFO("Init finished!");
+    robot_arm_.test();
+
     //TODO检查各个模块，还缺少检查地盘和检查机械臂的代码，需要标志位的检查
-    currentState = State::DELIVER_TO_PROCESSING;
+    // currentState = State::DELIVER_TO_PROCESSING;
     //currentState = State::STORE_FIRST_BATCH;
+    currentState = State::LOOKING_FOR_CIRCLE;
 }
 
 void RobotFSM::handleReadQRCode(Event event) {
@@ -143,22 +245,62 @@ void RobotFSM::handleFetchFirstBatch(Event event) {
 }
 
 void RobotFSM::handleDeliverToProcessing(Event event) { //步骤2，移动到粗加工区
-    int temp_index = add_tar_pose(0.2, 0, 0);
+    static int move_index;
+    static int add_flag = 0;
+
+    // robot_arm_.test();
+
+
+    if (add_flag != 1) {
+    move_index = add_tar_pose(0.29, -0.29, 0);
+    add_tar_pose(0.29, -0.29, 0);
+    add_tar_pose(0.8, -0.29, 0);
+    add_tar_pose(1.3, -0.29, 0);
+    add_tar_pose(1.85, -0.29, 0);
+    add_tar_pose(1.88,-0.93,0);
+    add_tar_pose(1.88,-0.92,0);
+
+    // add_tar_pose(1.85,-1.88,0);
+    // add_tar_pose(1.64,-1.81,-3.1415/2);
+    // add_tar_pose(0.98,-1.84,-3.1415/2);
+    // add_tar_pose(0.98,-1.84,-3.1415/2);
+    // add_tar_pose(0.84,-1.78,-3.1415/2);
+    // add_tar_pose(0.84,-1.6,-3.1415/2);
+    //  add_tar_pose(0.84,-1,-3.1415/2);
+    // add_tar_pose(0.88,-0.16,-3.1415/2);
+    // add_tar_pose(0.2,-0.2,-3.1415/2);
+    // add_tar_pose(0.2,-0.2,0);
+    // add_tar_pose(0,-0,0);
+
+    add_flag = 1;
+    }
     //add_tar_pose(0.2,0.2, 3.1415);//TODO 输入正确的坐标
-    move(temp_index);
-    //ROS_INFO("Moved to processing area.");
-    //currentState = State::STORE_FIRST_BATCH;
+    move(move_index);
+    ROS_INFO("move_index: %d", move_index);
+    if (car_arrive(move_index)) {
+        move_index ++;
+        ROS_INFO("move_index: %d", move_index);
+    } 
+    if(move_index == set_tar_poses.size()) {
+        add_flag = 0;
+        currentState = State::STORE_FIRST_BATCH;
+        ROS_INFO("test finish!");
+    }
 }
 
 void RobotFSM::handleStoreFirstBatch(Event event) {
     // if (event == Event::BATCH_STORED) {
+    
         
         robot_arm_.choose('r');
-        robot_arm_.put_down('r');
-        robot_arm_.choose('g');
-        robot_arm_.put_down('g');
-        robot_arm_.choose('b');
-        robot_arm_.put_down('b');
+        // robot_arm_.put_down('r');
+        // robot_arm_.choose('g');
+        // robot_arm_.put_down('g');
+        // robot_arm_.choose('b');
+        // robot_arm_.put_down('b');
+
+
+
         //int temp_index = 0;
         //temp_index = add_tar_pose(2, 2, 3.1415);//红原前面的坐标
         //move(temp_index);
@@ -170,6 +312,8 @@ void RobotFSM::handleStoreFirstBatch(Event event) {
         //robot_arm_.put_down('b''r');
         //temp_index = add_tar_pose(2, 2, 3.1415);//绿原前面的坐标
         //move(temp_index);
+
+        
         
 
         currentState = State::FETCH_SECOND_BATCH;

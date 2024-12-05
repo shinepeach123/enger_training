@@ -13,7 +13,7 @@
 void cur_pose_cb(const nav_msgs::Odometry::ConstPtr& msg)
 {
     cur_pose = *msg;
-    ROS_INFO(":cur_pose.pose.pose.position.x = %.5f",cur_pose.pose.pose.position.x);
+    //ROS_INFO(":cur_pose.pose.pose.position.x = %.5f",cur_pose.pose.pose.position.x);
 }
 
 int main(int argc, char **argv) {
@@ -25,8 +25,8 @@ int main(int argc, char **argv) {
         ("/aft_mapped_to_init", 10, cur_pose_cb);
     ros::Publisher tar_pose_pub = nh.advertise<nav_msgs::Odometry>("/target_pose", 10);
     set_target_pose.pose.pose.position.x=0;
-    //fsm.set_state(State::INIT);
-    fsm.set_state(State::TEST);
+    fsm.set_state(State::INIT);
+    //fsm.set_state(State::TEST);
     while(ros::ok()){
         fsm.processEvent(Event::BATCH_DELIVERED);
         tar_pose_pub.publish(pub_target_pose);

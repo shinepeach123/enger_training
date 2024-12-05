@@ -23,7 +23,10 @@ enum class State {
     RETURN_TO_START,
     COMPLETE,
     TEST,
-    TEST_VISION
+    TEST_VISION,
+    LOOKING_FOR_CIRCLE,
+    MOVE_GREEN,
+    MOVE_BLUE
 };
 
 enum class Event {
@@ -77,6 +80,10 @@ private:
     void handleReturnToStart(Event event);
 
     void handleComplete(Event event);
+
+    void handle_move_blue();
+
+    void handle_move_green();
 };
 
 #endif

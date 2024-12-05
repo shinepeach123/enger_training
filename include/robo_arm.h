@@ -33,14 +33,14 @@
 #define CAR_HIGHT 0.2 //快在车上的高度
 #define TEKEUP_HEIGHT -61 //从车上拿起的高度
 
-#define CIRCULAR_RED_X 0 //圆相对与车的x坐标
-#define CIRCULAR_RED_Y -200
+#define CIRCULAR_RED_X 40  //圆相对与车的x坐标
+#define CIRCULAR_RED_Y -230
 #define CIRCULAR_RED_CAM_ANGLE 3.1415 + 0.3
-#define CIRCULAR_GREEN_X -210
-#define CIRCULAR_GREEN_Y -180
-#define CIRCULAR_GREEN_CAM_ANGLE 3.1415
-#define CIRCULAR_BLUE_X -360
-#define CIRCULAR_BLUE_Y -180
+#define CIRCULAR_GREEN_X -250
+#define CIRCULAR_GREEN_Y -230
+#define CIRCULAR_GREEN_CAM_ANGLE 3.1415 +0.3
+#define CIRCULAR_BLUE_X -130
+#define CIRCULAR_BLUE_Y -230
 #define CIRCULAR_BLUE_CAM_ANGLE 3.1415+0.3
 #define CIRCULAR_HEIGHT 0.5 //圆在地上的高度 
 
@@ -54,8 +54,8 @@
 
 #define CAM_ANGLE 0.1    //nouseful
 
-#define LIMIT_VISION_X 0.2 //视觉对准
-#define LIMIT_VISION_Y 0.2 //视觉对准
+#define LIMIT_VISION_X 4 //视觉对准
+#define LIMIT_VISION_Y 4 //视觉对准
 
 #define MOVE_LITTLE_DISTANCE 0.5 //对准阶段一次移动的距离
 
@@ -107,12 +107,16 @@ public:
     void choose (char color);
     void put_down(char color);
     void test();
+    void handle_move_blue();
+    void handle_move_green();
+    int test_vision(char color);
     int vision_correction(char color);
 
 private:
 
     vision_data vision_data_;
     int add_arm_pose(float x, float y, float z, float cam_angle, float paw_angle);
+    int add_arm_pose_vision(float x, float y, float z, float cam_angle, float paw_angle);
     int vision(char color);
     void movelittle(char direction);
     void arm_pose_cb(const nav_msgs::Odometry::ConstPtr& msg);
