@@ -23,7 +23,7 @@
 
 #define RED_X 99.5 + 36 //红色方块在车上的x坐标
 #define RED_Y 106 - 30 //ok
-#define CAM_ANGLE_RED 3.1415//ok 
+#define CAM_ANGLE_RED 3.1415 //ok 
 #define CAM_ANGLE_BLUE 3.1415 //ok
 #define BULE_X 99.5 + 30//ok
 #define BULE_Y 199 - 26//ok

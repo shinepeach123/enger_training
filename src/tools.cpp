@@ -55,7 +55,7 @@ if (!std::isfinite(cur_orientation.x()) || !std::isfinite(cur_orientation.y()) |
     if(tar_yaw < 0.01) {
         yaw_is_ok = true;
     }
-    if(tar_yaw < 0.7) {
+    if(tar_yaw < 0.03) {
         yaw_is_ok_for_circular = true;
     }
     // 构造目标姿态的四元数并赋值
@@ -65,7 +65,7 @@ if (!std::isfinite(cur_orientation.x()) || !std::isfinite(cur_orientation.y()) |
     transformed_odom.pose.pose.orientation = tf2::toMsg(target_q);
     
 
-    ROS_INFO("Transformed target position: (%.2f, %.2f, %.2f)", transformed_odom.pose.pose.position.x, transformed_odom.pose.pose.position.y, transformed_odom.pose.pose.position.z);
+    //ROS_INFO("Transformed target position: (%.2f, %.2f, %.2f)", transformed_odom.pose.pose.position.x, transformed_odom.pose.pose.position.y, transformed_odom.pose.pose.position.z);
     return transformed_odom;
 }
 

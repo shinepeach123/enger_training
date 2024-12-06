@@ -32,8 +32,11 @@ void RobotArm::test() {
     ROS_INFO("arm begin testen");
     int temp_index = 
 
-    add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
     ROS_INFO("choose index111111111111 %d",temp_index);
+
+
     //add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
     //add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
     //ROS_INFO("choose index22222222222222 %d",temp_index);
@@ -116,6 +119,7 @@ void RobotArm::test2() {
     int temp_index = 
 
     add_arm_pose(CIRCULAR_BLUE_X, CIRCULAR_BLUE_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+    add_arm_pose(CIRCULAR_BLUE_X, CIRCULAR_BLUE_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
     
     //add_arm_pose(CIRCULAR_BLUE_X, CIRCULAR_BLUE_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
 
@@ -193,8 +197,8 @@ int RobotArm::test_vision(char color) {
 
 
     if(color == 'b' && vision_data_.color == 2){ //（规定红色为1，蓝色为2，绿色为3）
-        blue_y -= -(vision_data_.x - 300) * 0.13;
-        blue_x -= -(vision_data_.y - 228) * 0.13;
+        blue_y -= -(vision_data_.x - 300) * 0.19;
+        blue_x -= -(vision_data_.y - 228) * 0.19;
         blue_y = clamp(blue_y, CIRCULAR_BLUE_Y - 80, CIRCULAR_BLUE_Y + 80);
         blue_x = clamp(blue_x, CIRCULAR_BLUE_X - 80, CIRCULAR_BLUE_X + 80); 
         //ROS_INFO("tar x = %.4f ,tar_y = %.4f",vision_data_.x - 160,vision_data_.y - 120);
@@ -236,53 +240,6 @@ int RobotArm::test_vision(char color) {
         }
         while (temp_index < arm_control.size() && ros::ok());
         
-    }
-
-    if(color == 'r'){ //（规定红色为1，蓝色为2，绿色为3）
-        double x2 = green_circle.x;
-        double y2 = green_circle.y;
-        double x1 = blue_circle.x;
-        double y1 = blue_circle.y;
-        double destence = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-        double k = (y2 - y1) / (x2 - x1);
-        double b = (y1 - k * x1);
-
-        // 构造二次方程的系数
-        double a = 1 + k * k;
-        double b_quad = -2 * x2 + 2 * k * (b - y2);
-        double c_quad = x2 * x2 + (b - y2) * (b - y2) - destence * destence;
-
-
-        double discriminant = b_quad * b_quad - 4 * a * c_quad;
-        // 求解二次方程，得到两个 x 值
-        double x_solution1 = (-b_quad + sqrt(discriminant)) / (2 * a);
-        double x_solution2 = (-b_quad - sqrt(discriminant)) / (2 * a);
-        double x3;
-        // 比较哪个更接近 -180
-        if (abs(x_solution1 + 180) < abs(x_solution2 + 180)) {
-            red_circle.x = x_solution1;
-        } else {
-            red_circle.x = x_solution2;
-        }
-
-        red_circle.y = k * red_circle.x + b;
-
-        red_circle.x += 5;
-        red_circle.y -= 11;
-
-        ROS_INFO("tar x = %.4f ,tar_y = %.4f",vision_data_.x - 160,vision_data_.y - 120);
-        int temp_index = add_arm_pose(red_circle.x, red_circle.y, -100, CIRCULAR_BLUE_CAM_ANGLE, PAW_OPEN);
-        add_arm_pose(red_circle.x, red_circle.y, -100, CIRCULAR_BLUE_CAM_ANGLE, PAW_OPEN);
-        //add_arm_pose_vision(red_x, red_y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
-        do {
-            //if (arm_arrived(arm_control[temp_index])){
-            arm_pose_pub (temp_index);
-            temp_index ++;
-            //ROS_INFO("choose index %d",temp_index);
-            //}
-            ros::Duration(arm_control[temp_index-1].temp_time).sleep();
-        }
-        while (temp_index < arm_control.size() && ros::ok());
     }
 
     if (fabs(vision_data_.x - 300) < 3 && fabs(vision_data_.y - 225) < 3
@@ -327,41 +284,11 @@ int RobotArm::test_vision(char color) {
 
                 red_circle.y = k * red_circle.x + b;
                 ROS_INFO("redx %.2f,redy %.2f",red_circle.x, red_circle.y);
+
+                red_circle.x += 1;
+                red_circle.y -= 20;
                 
                 break;
-            // case 'r':
-            //     red_circle.x = red_x;
-            //     red_circle.y = red_y;
-            //     double x1 = blue_circle.x;
-            //     double y1 = blue_circle.y;
-            //     double x2 = blue_circle.x;
-            //     double y2 = blue_circle.y;
-            //     double destence = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-            //     double k = (y2 - y1) / (x2 - x1);
-            //     double b = (y1 - k * x1);
-
-            //     // 构造二次方程的系数
-            //     double a = 1 + k * k;
-            //     double b_quad = -2 * x2 + 2 * k * (b - y2);
-            //     double c_quad = x2 * x2 + (b - y2) * (b - y2) - destence * destence;
-
-
-            //     double discriminant = b_quad * b_quad - 4 * a * c_quad;
-            //     // 求解二次方程，得到两个 x 值
-            //     double x_solution1 = (-b_quad + sqrt(discriminant)) / (2 * a);
-            //     double x_solution2 = (-b_quad - sqrt(discriminant)) / (2 * a);
-            //     double x3;
-            //     // 比较哪个更接近 -180
-            //     if (abs(x_solution1 + 180) < abs(x_solution2 + 180)) {
-            //         green_circle.x = x_solution1;
-            //     } else {
-            //         green_circle.x = x_solution2;
-            //     }
-
-            //     green_circle.y = k * green_circle.x + b;
-            //     ROS_INFO("blue_circle successfully founded");
-            //     return_value = 3;
-            //     break;
         }
     }
     return return_value;
@@ -374,7 +301,7 @@ void RobotArm::pickup (char color) {
     ROS_INFO("begin PICKUP");
     if (color == 'r') {
         ROS_INFO("PICKUP RED");
-        add_arm_pose(red_circle.x, red_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        temp_index = add_arm_pose(red_circle.x, red_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
         add_arm_pose(red_circle.x, red_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
         add_arm_pose(red_circle.x, red_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
         add_arm_pose(red_circle.x, red_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
@@ -398,6 +325,7 @@ void RobotArm::pickup (char color) {
         ROS_INFO("PICKUP BLUE");
         temp_index = //add_arm_pose(blue_circle.x, blue_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
         //add_arm_pose(blue_circle.x, blue_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(blue_circle.x, blue_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
         add_arm_pose(blue_circle.x, blue_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
         add_arm_pose(blue_circle.x, blue_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
         add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_CLOSE);
