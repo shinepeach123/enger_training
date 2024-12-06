@@ -34,9 +34,9 @@ void RobotArm::test() {
 
     add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
     ROS_INFO("choose index111111111111 %d",temp_index);
-    add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
-    add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
-    ROS_INFO("choose index22222222222222 %d",temp_index);
+    //add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    //add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    //ROS_INFO("choose index22222222222222 %d",temp_index);
     //add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
     //add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
     // add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);

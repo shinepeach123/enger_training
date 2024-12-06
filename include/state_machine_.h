@@ -30,7 +30,8 @@ enum class State {
     MOVE_GREEN,
     MOVE_BLUE,
     READY_ARM,
-    DELIVER_TO_STORAGE
+    DELIVER_TO_STORAGE,
+    TEST_MOVEMENT
 };
 
 enum class Event {
