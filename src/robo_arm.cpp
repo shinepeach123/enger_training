@@ -33,13 +33,31 @@ void RobotArm::test() {
     int temp_index = 
 
     add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    ROS_INFO("choose index111111111111 %d",temp_index);
     add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    ROS_INFO("choose index22222222222222 %d",temp_index);
+    //add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    //add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+    // add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+
+    // add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_BLUE, PAW_OPEN);
+    
+    // add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_BLUE, PAW_OPEN);
     
     
-    add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+    // add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_OPEN);
+    // add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_OPEN);
+    // add_arm_pose(GREEN_X, GREEN_Y, -62, CAM_ANGLE_GREEN, PAW_OPEN);
+    // add_arm_pose(GREEN_X, GREEN_Y, -62, CAM_ANGLE_GREEN, PAW_CLOSE);
+    // add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_CLOSE);
+    // add_arm_pose(GREEN_X, GREEN_Y, -62, CAM_ANGLE_GREEN, PAW_CLOSE);
+    // add_arm_pose(GREEN_X, GREEN_Y, -62, CAM_ANGLE_GREEN, PAW_OPEN);
+
     
+    //add_arm_pose(CIRCULAR_BLUE_X, CIRCULAR_BLUE_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
     
-    //add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+    //add_arm_pose(CIRCULAR_BLUE_X, CIRCULAR_BLUE_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
     
     
     
@@ -82,6 +100,28 @@ void RobotArm::test() {
     do {
         //if (arm_arrived(arm_control[temp_index])){
         arm_pose_pub (temp_index);
+        ROS_INFO("choose index %d",temp_index);
+        temp_index ++;
+
+        //}
+        ros::Duration(arm_control[temp_index-1].temp_time).sleep();
+    }
+    while (temp_index < arm_control.size() && ros::ok());
+
+    ROS_INFO("arm has testen");
+}
+
+void RobotArm::test2() {
+    ROS_INFO("arm begin testen");
+    int temp_index = 
+
+    add_arm_pose(CIRCULAR_BLUE_X, CIRCULAR_BLUE_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+    
+    //add_arm_pose(CIRCULAR_BLUE_X, CIRCULAR_BLUE_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+
+    do {
+        //if (arm_arrived(arm_control[temp_index])){
+        arm_pose_pub (temp_index);
         temp_index ++;
         ROS_INFO("choose index %d",temp_index);
         //}
@@ -96,7 +136,7 @@ void RobotArm::handle_move_blue() {
     //ROS_INFO("arm begin testen");
     int temp_index = 
    add_arm_pose(CIRCULAR_BLUE_X, CIRCULAR_BLUE_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
- add_arm_pose(CIRCULAR_BLUE_X, CIRCULAR_BLUE_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+ //add_arm_pose(CIRCULAR_BLUE_X, CIRCULAR_BLUE_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
     do {
         //if (arm_arrived(arm_control[temp_index])){
         arm_pose_pub (temp_index);
@@ -115,7 +155,7 @@ void RobotArm::handle_move_green() {
     //ROS_INFO("arm begin testen");
     int temp_index = 
   add_arm_pose(CIRCULAR_GREEN_X, CIRCULAR_GREEN_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
- add_arm_pose(CIRCULAR_GREEN_X, CIRCULAR_GREEN_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+ //add_arm_pose(CIRCULAR_GREEN_X, CIRCULAR_GREEN_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
   
     do {
         //if (arm_arrived(arm_control[temp_index])){
@@ -152,14 +192,14 @@ int RobotArm::test_vision(char color) {
     int judge = 0;
 
 
-    if(color == 'r' && vision_data_.color == 1){ //（规定红色为1，蓝色为2，绿色为3）
-        red_y -= -(vision_data_.x - 160) * 0.5;
-        red_x -= -(vision_data_.y - 120) * 0.5;
-        red_y = clamp(red_y, CIRCULAR_RED_Y - 80, CIRCULAR_RED_Y + 80);
-        red_x = clamp(red_x, CIRCULAR_RED_X - 80, CIRCULAR_RED_X + 80); 
-        ROS_INFO("tar x = %.4f ,tar_y = %.4f",vision_data_.x - 160,vision_data_.y - 120);
-        int temp_index = add_arm_pose_vision(red_x, red_y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
-        //d_arm_pose_vision(red_x, red_y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+    if(color == 'b' && vision_data_.color == 2){ //（规定红色为1，蓝色为2，绿色为3）
+        blue_y -= -(vision_data_.x - 300) * 0.13;
+        blue_x -= -(vision_data_.y - 228) * 0.13;
+        blue_y = clamp(blue_y, CIRCULAR_BLUE_Y - 80, CIRCULAR_BLUE_Y + 80);
+        blue_x = clamp(blue_x, CIRCULAR_BLUE_X - 80, CIRCULAR_BLUE_X + 80); 
+        //ROS_INFO("tar x = %.4f ,tar_y = %.4f",vision_data_.x - 160,vision_data_.y - 120);
+        int temp_index = add_arm_pose_vision(blue_x, blue_y, -100, CIRCULAR_BLUE_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose_vision(blue_x, blue_y, -100, CIRCULAR_BLUE_CAM_ANGLE, PAW_OPEN);
         do {
             //if (arm_arrived(arm_control[temp_index])){
             arm_pose_pub (temp_index);
@@ -172,20 +212,68 @@ int RobotArm::test_vision(char color) {
         judge = 1;
     }
 
-    if(color == 'b'){ //（规定红色为1，蓝色为2，绿色为3）
+    if(color == 'g'){ //（规定红色为1，蓝色为2，绿色为3）
 
-        if(vision_data_.color == 2){
-            blue_y -= -(vision_data_.x - 160) * 0.15;
-            blue_x -= -(vision_data_.y - 120) * 0.15;
-            //blue_y = clamp(blue_x, CIRCULAR_BLUE_Y - 20, CIRCULAR_BLUE_Y + 20);
-            //blue_x = clamp(blue_y, CIRCULAR_BLUE_X - 20, CIRCULAR_BLUE_X + 80);
+        if(vision_data_.color == 3){
+            green_y -= -(vision_data_.x - 300) * 0.15;
+            green_x -= -(vision_data_.y - 228) * 0.15;
+            //green_y = clamp(green_x, CIRCULAR_green_Y - 20, CIRCULAR_green_Y + 20);
+            //green_x = clamp(green_y, CIRCULAR_green_X - 20, CIRCULAR_green_X + 80);
             judge = 1; 
         }
-        ROS_INFO("looking for blue");
+        ROS_INFO("looking for green");
         ROS_INFO("tar x = %.4f ,tar_y = %.4f",vision_data_.x - 160,vision_data_.y - 120);
-        int temp_index = add_arm_pose_vision(blue_x, blue_y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
-        add_arm_pose_vision(blue_x, blue_y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        int temp_index = add_arm_pose_vision(green_x, green_y, -100, CIRCULAR_BLUE_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose_vision(green_x, green_y, -100, CIRCULAR_BLUE_CAM_ANGLE, PAW_OPEN);
         
+        do {
+            //if (arm_arrived(arm_control[temp_index])){
+            arm_pose_pub (temp_index);
+            temp_index ++;
+            //ROS_INFO("choose index %d",temp_index);
+            //}
+            ros::Duration(arm_control[temp_index-1].temp_time).sleep();
+        }
+        while (temp_index < arm_control.size() && ros::ok());
+        
+    }
+
+    if(color == 'r'){ //（规定红色为1，蓝色为2，绿色为3）
+        double x2 = green_circle.x;
+        double y2 = green_circle.y;
+        double x1 = blue_circle.x;
+        double y1 = blue_circle.y;
+        double destence = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+        double k = (y2 - y1) / (x2 - x1);
+        double b = (y1 - k * x1);
+
+        // 构造二次方程的系数
+        double a = 1 + k * k;
+        double b_quad = -2 * x2 + 2 * k * (b - y2);
+        double c_quad = x2 * x2 + (b - y2) * (b - y2) - destence * destence;
+
+
+        double discriminant = b_quad * b_quad - 4 * a * c_quad;
+        // 求解二次方程，得到两个 x 值
+        double x_solution1 = (-b_quad + sqrt(discriminant)) / (2 * a);
+        double x_solution2 = (-b_quad - sqrt(discriminant)) / (2 * a);
+        double x3;
+        // 比较哪个更接近 -180
+        if (abs(x_solution1 + 180) < abs(x_solution2 + 180)) {
+            red_circle.x = x_solution1;
+        } else {
+            red_circle.x = x_solution2;
+        }
+
+        red_circle.y = k * red_circle.x + b;
+
+        red_circle.x += 5;
+        red_circle.y -= 11;
+
+        ROS_INFO("tar x = %.4f ,tar_y = %.4f",vision_data_.x - 160,vision_data_.y - 120);
+        int temp_index = add_arm_pose(red_circle.x, red_circle.y, -100, CIRCULAR_BLUE_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(red_circle.x, red_circle.y, -100, CIRCULAR_BLUE_CAM_ANGLE, PAW_OPEN);
+        //add_arm_pose_vision(red_x, red_y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
         do {
             //if (arm_arrived(arm_control[temp_index])){
             arm_pose_pub (temp_index);
@@ -197,64 +285,83 @@ int RobotArm::test_vision(char color) {
         while (temp_index < arm_control.size() && ros::ok());
     }
 
-    if(color == 'g'){ //（规定红色为1，蓝色为2，绿色为3）
-        double x1 = red_circle.x;
-        double y1 = red_circle.y;
-        double x2 = blue_circle.x;
-        double y2 = blue_circle.y;
-        double destence = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-        double k = (y2 - y1) / (x2 - x1);
-        double b = (y1 - k * x1);
-
-    }
-
-    //     if(vision_data_.color == 3){
-    //         double errorx = vision_data_.x - 160;
-    //         double errory = vision_data_.y - 120;
-    //         //errory = clamp(errory, -20, 20);
-    //         //errorx = clamp(errorx, -20, 20);
-    //         green_y -= -(errory) * 0.05;
-    //         green_x -= (errorx) * 0.05; 
-    //     green_y = clamp(green_y, CIRCULAR_GREEN_Y - 30, CIRCULAR_GREEN_Y + 30);
-    //     green_x = clamp(green_x, CIRCULAR_GREEN_X - 30, CIRCULAR_GREEN_X + 30);
-    //         judge = 1; 
-    //     }
-    //     ROS_INFO("tar x = %.4f ,tar_y = %.4f",vision_data_.x - 160,vision_data_.y - 120);
-    //     int temp_index = add_arm_pose_vision(green_x, green_y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
-    //     add_arm_pose_vision(green_x, green_y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
-    //     //add_arm_pose_vision(red_x, red_y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
-    //     do {
-    //         //if (arm_arrived(arm_control[temp_index])){
-    //         arm_pose_pub (temp_index);
-    //         temp_index ++;
-    //         //ROS_INFO("choose index %d",temp_index);
-    //         //}
-    //         ros::Duration(arm_control[temp_index-1].temp_time).sleep();
-    //     }
-    //     while (temp_index < arm_control.size() && ros::ok());
-    //}
-
-    if (fabs(vision_data_.x - 160) < LIMIT_VISION_X && fabs(vision_data_.y - 120) < LIMIT_VISION_Y
+    if (fabs(vision_data_.x - 300) < 3 && fabs(vision_data_.y - 225) < 3
     && judge == 1) {
         switch (color) {
-            case 'r':
-                red_circle.x = red_x;
-                red_circle.y = red_y;
-                ROS_INFO("red_circle successfully founded");
+            case 'b':
+                blue_circle.x = blue_x;
+                blue_circle.y = blue_y;
+                ROS_INFO("bluex %.2f,bluey %.2f",blue_circle.x, blue_circle.y);
                 return_value =  1;
                 break;
             case 'g':
                 green_circle.x = green_x;
                 green_circle.y = green_y;
-                ROS_INFO("green_circle successfully founded");
-                return_value = 3;
-                break;
-            case 'b':
-                blue_circle.x = blue_x;
-                blue_circle.y = blue_y;
-                ROS_INFO("blue_circle successfully founded");
+                ROS_INFO("bluex %.2f,bluey %.2f",green_circle.x, green_circle.y);
                 return_value = 2;
+                double x2 = green_circle.x;
+                double y2 = green_circle.y;
+                double x1 = blue_circle.x;
+                double y1 = blue_circle.y;
+                double destence = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+                double k = (y2 - y1) / (x2 - x1);
+                double b = (y1 - k * x1);
+
+                // 构造二次方程的系数
+                double a = 1 + k * k;
+                double b_quad = -2 * x2 + 2 * k * (b - y2);
+                double c_quad = x2 * x2 + (b - y2) * (b - y2) - destence * destence;
+
+
+                double discriminant = b_quad * b_quad - 4 * a * c_quad;
+                // 求解二次方程，得到两个 x 值
+                double x_solution1 = (-b_quad + sqrt(discriminant)) / (2 * a);
+                double x_solution2 = (-b_quad - sqrt(discriminant)) / (2 * a);
+                double x3;
+                // 比较哪个更接近 -180
+                if (abs(x_solution1 + 180) < abs(x_solution2 + 180)) {
+                    red_circle.x = x_solution1;
+                } else {
+                    red_circle.x = x_solution2;
+                }
+
+                red_circle.y = k * red_circle.x + b;
+                ROS_INFO("redx %.2f,redy %.2f",red_circle.x, red_circle.y);
+                
                 break;
+            // case 'r':
+            //     red_circle.x = red_x;
+            //     red_circle.y = red_y;
+            //     double x1 = blue_circle.x;
+            //     double y1 = blue_circle.y;
+            //     double x2 = blue_circle.x;
+            //     double y2 = blue_circle.y;
+            //     double destence = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+            //     double k = (y2 - y1) / (x2 - x1);
+            //     double b = (y1 - k * x1);
+
+            //     // 构造二次方程的系数
+            //     double a = 1 + k * k;
+            //     double b_quad = -2 * x2 + 2 * k * (b - y2);
+            //     double c_quad = x2 * x2 + (b - y2) * (b - y2) - destence * destence;
+
+
+            //     double discriminant = b_quad * b_quad - 4 * a * c_quad;
+            //     // 求解二次方程，得到两个 x 值
+            //     double x_solution1 = (-b_quad + sqrt(discriminant)) / (2 * a);
+            //     double x_solution2 = (-b_quad - sqrt(discriminant)) / (2 * a);
+            //     double x3;
+            //     // 比较哪个更接近 -180
+            //     if (abs(x_solution1 + 180) < abs(x_solution2 + 180)) {
+            //         green_circle.x = x_solution1;
+            //     } else {
+            //         green_circle.x = x_solution2;
+            //     }
+
+            //     green_circle.y = k * green_circle.x + b;
+            //     ROS_INFO("blue_circle successfully founded");
+            //     return_value = 3;
+            //     break;
         }
     }
     return return_value;
@@ -262,43 +369,51 @@ int RobotArm::test_vision(char color) {
 }
 
 
-void RobotArm::choose (char color) {
-    int temp_index=0;
-    //temp_index = add_arm_pose(INIT_POSE_X, INIT_POSE_Y, CAR_HIGHT, CAM_ANGLE, PAW_OPEN);
+void RobotArm::pickup (char color) {
+        int temp_index=0;
+    ROS_INFO("begin PICKUP");
     if (color == 'r') {
-        ROS_INFO("CHOOSE RED");
+        ROS_INFO("PICKUP RED");
+        add_arm_pose(red_circle.x, red_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(red_circle.x, red_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(red_circle.x, red_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(red_circle.x, red_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_CLOSE);
+        add_arm_pose(RED_X, RED_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_CLOSE);
+        add_arm_pose(RED_X, RED_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_OPEN);
         add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
-        add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
         
-        add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -100, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
-        add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
-        add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
-        // add_arm_pose(RED_X, RED_Y, CAR_HIGHT, CAM_ANGLE_RED, PAW_OPEN);
-        // add_arm_pose(RED_X, RED_Y, CAR_HIGHT, CAM_ANGLE_RED, PAW_CLOSE);
-        // add_arm_pose(RED_X, RED_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_CLOSE);
     } else if (color == 'g') {
-        ROS_INFO("CHOOSE GREEN");
-        add_arm_pose(GREEN_X, GREEN_Y, CAR_HIGHT, CAM_ANGLE_GREEN, PAW_OPEN);
-        add_arm_pose(GREEN_X, GREEN_Y, CAR_HIGHT, CAM_ANGLE_GREEN, PAW_CLOSE);
+        ROS_INFO("PICKUP GREEN");
+        temp_index = add_arm_pose(green_circle.x, green_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(green_circle.x, green_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(green_circle.x, green_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(green_circle.x, green_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_CLOSE);
         add_arm_pose(GREEN_X, GREEN_Y, TEKEUP_HEIGHT, CAM_ANGLE_GREEN, PAW_CLOSE);
+        add_arm_pose(GREEN_X, GREEN_Y, TEKEUP_HEIGHT, CAM_ANGLE_GREEN, PAW_OPEN);
+        add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_OPEN);
+        
     } else if (color == 'b') {
-        ROS_INFO("CHOOSE BLUE");
-        add_arm_pose(BULE_X, BULE_Y, CAR_HIGHT, CAM_ANGLE_BLUE, PAW_OPEN);
-        add_arm_pose(BULE_X, BULE_Y, CAR_HIGHT, CAM_ANGLE_BLUE, PAW_CLOSE);
-        add_arm_pose(BULE_X, BULE_Y, TEKEUP_HEIGHT, CAM_ANGLE_BLUE, PAW_CLOSE);
+        ROS_INFO("PICKUP BLUE");
+        temp_index = add_arm_pose(blue_circle.x, blue_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(blue_circle.x, blue_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(blue_circle.x, blue_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(blue_circle.x, blue_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_CLOSE);
+        add_arm_pose(BULE_X, BULE_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_CLOSE);
+        add_arm_pose(BULE_X, BULE_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_OPEN);
+        add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
     }
-    
-    
+
     do {
-        //if (arm_arrived(arm_control[temp_index])){
         arm_pose_pub (temp_index);
         temp_index ++;
         ROS_INFO("choose index %d",temp_index);
-        //}
         ros::Duration(arm_control[temp_index-1].temp_time).sleep();
     }
     while (temp_index < arm_control.size() && ros::ok());
-    ROS_INFO("has chooosen");
+    ROS_INFO("has pick up");
 }
 
 int RobotArm::vision_correction(char color){//初版视觉矫正代码。使用阻塞式编写
@@ -385,50 +500,53 @@ void RobotArm::put_down(char color){
     ROS_INFO("begin put down");
     if (color == 'r') {
         ROS_INFO("PUT DOWN RED");
-        temp_index =     add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+        temp_index =   //add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        //add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(CIRCULAR_RED_X, CIRCULAR_RED_Y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
         add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
-        add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+        //add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
         add_arm_pose(RED_X, RED_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_OPEN);
         add_arm_pose(RED_X, RED_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_CLOSE);
         add_arm_pose(RED_X, RED_Y, -1, CAM_ANGLE_RED, PAW_CLOSE);
-        add_arm_pose(red_circle.x, red_circle.y, -1, CAM_ANGLE_RED, PAW_CLOSE);
-        add_arm_pose(red_circle.x, red_circle.y, -160, CAM_ANGLE_RED, PAW_CLOSE);
-        add_arm_pose(red_circle.x, red_circle.y, -160, CAM_ANGLE_RED, PAW_OPEN);
-        add_arm_pose(red_circle.x, red_circle.y, -1, CAM_ANGLE_RED, PAW_OPEN);
+        add_arm_pose(red_circle.x, red_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(red_circle.x, red_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(red_circle.x, red_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(red_circle.x, red_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
         
     } else if (color == 'g') {
         ROS_INFO("PUT DOWN GREEN");
-        temp_index =     add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
-        add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
-        add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
-        add_arm_pose(GREEN_X, GREEN_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_OPEN);
-        add_arm_pose(GREEN_X, GREEN_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_CLOSE);
-        add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_RED, PAW_CLOSE);
-        add_arm_pose(green_circle.x, green_circle.y, -1, CAM_ANGLE_RED, PAW_CLOSE);
-        add_arm_pose(green_circle.x, green_circle.y, -160, CAM_ANGLE_RED, PAW_CLOSE);
-        add_arm_pose(green_circle.x, green_circle.y, -160, CAM_ANGLE_RED, PAW_OPEN);
-        add_arm_pose(green_circle.x, green_circle.y, -1, CAM_ANGLE_RED, PAW_OPEN);
+        temp_index =     //add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_OPEN);
+        //add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_OPEN);
+        add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_OPEN);
+        add_arm_pose(GREEN_X, GREEN_Y, TEKEUP_HEIGHT, CAM_ANGLE_GREEN, PAW_OPEN);
+        add_arm_pose(GREEN_X, GREEN_Y, TEKEUP_HEIGHT, CAM_ANGLE_GREEN, PAW_CLOSE);
+        add_arm_pose(GREEN_X, GREEN_Y, -1, CAM_ANGLE_GREEN, PAW_CLOSE);
+        add_arm_pose(green_circle.x, green_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(green_circle.x, green_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(green_circle.x, green_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(green_circle.x, green_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
         
     } else if (color == 'b') {
         ROS_INFO("PUT DOWN BLUE");
-        temp_index =     add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
-        add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+        temp_index =     //add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
+        //add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
         add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_OPEN);
         add_arm_pose(BULE_X, BULE_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_OPEN);
         add_arm_pose(BULE_X, BULE_Y, TEKEUP_HEIGHT, CAM_ANGLE_RED, PAW_CLOSE);
         add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_CLOSE);
-        add_arm_pose(blue_circle.x, blue_circle.y, -1, CAM_ANGLE_RED, PAW_CLOSE);
-        add_arm_pose(blue_circle.x, blue_circle.y, -160, CAM_ANGLE_RED, PAW_CLOSE);
-        add_arm_pose(blue_circle.x, blue_circle.y, -160, CAM_ANGLE_RED, PAW_OPEN);
-        add_arm_pose(blue_circle.x, blue_circle.y, -1, CAM_ANGLE_RED, PAW_OPEN);
+        add_arm_pose(blue_circle.x, blue_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(blue_circle.x, blue_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
+        add_arm_pose(blue_circle.x, blue_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        add_arm_pose(blue_circle.x, blue_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
     }
 
     do {
+        //if (arm_arrived(arm_control[temp_index])){
         arm_pose_pub (temp_index);
-        if (arm_arrived(arm_control[temp_index])) {
-            temp_index ++;
-            ROS_INFO("put down index %d",temp_index);
-        }
+        temp_index ++;
+        ROS_INFO("choose index %d",temp_index);
+        //}
+        ros::Duration(arm_control[temp_index-1].temp_time).sleep();
     }
     while (temp_index < arm_control.size() && ros::ok());
     ROS_INFO("has put down");
@@ -447,8 +565,10 @@ int RobotArm::add_arm_pose(float x, float y, float z, float cam_angle, float paw
     //this temp this temp this temp this temp this temp this temp this temp this temp
     double last_z = arm_control.back().z;
     if (fabs(last_z - z) != 0) {
-        temp_pose.temp_time = 0.07 * fabs(last_z - z);
-
+        temp_pose.temp_time = 0.06 * fabs(last_z - z);
+        if(temp_pose.temp_time < 2) {
+            temp_pose.temp_time = 2;
+        }
     } else {
         temp_pose.temp_time = 2;
     }

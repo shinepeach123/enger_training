@@ -13,7 +13,7 @@
 std::vector<set_target_poses> set_tar_poses;
 bool cur_pose_is_ok = false;
 bool yaw_is_ok = false;
-
+bool yaw_is_ok_for_circular = false;
 
 nav_msgs::Odometry trans_global2car(const nav_msgs::Odometry& target_pose, const nav_msgs::Odometry& cur_pose, double target_yaw) {
     // 提取 cur_pose 中的旋转信息并生成 tf2 Transform
@@ -52,8 +52,11 @@ if (!std::isfinite(cur_orientation.x()) || !std::isfinite(cur_orientation.y()) |
     double tar_yaw = target_yaw - tf::getYaw(cur_pose.pose.pose.orientation)  ;
     while (tar_yaw < -M_PI) tar_yaw += 2 * M_PI;
     while (tar_yaw > M_PI) tar_yaw -= 2 * M_PI;
-    if(tar_yaw < 0.03) {
+    if(tar_yaw < 0.01) {
         yaw_is_ok = true;
+    }
+    if(tar_yaw < 0.7) {
+        yaw_is_ok_for_circular = true;
     }
     // 构造目标姿态的四元数并赋值
     tf2::Quaternion target_q;
@@ -73,7 +76,7 @@ int add_tar_pose(float x, float y, float yaw) {
     add_tar_pose_pose.yaw = yaw;
     set_tar_poses.push_back(add_tar_pose_pose);
     ROS_INFO("Added waypoint: (%.2f, %.2f, %.2f)", x, y, yaw);
-    return arm_control.size() - 1;
+    return set_tar_poses.size() - 1;
 }
 
 void reset_tar_pose() {

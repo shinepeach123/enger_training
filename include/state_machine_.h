@@ -9,7 +9,9 @@
 extern nav_msgs::Odometry cur_pose;
 extern nav_msgs::Odometry pub_target_pose;
 extern nav_msgs::Odometry set_target_pose;
-
+extern int can_move;
+extern nav_msgs::Odometry lock_pose;
+extern int lock_flag;
 
 
 enum class State {
@@ -26,7 +28,9 @@ enum class State {
     TEST_VISION,
     LOOKING_FOR_CIRCLE,
     MOVE_GREEN,
-    MOVE_BLUE
+    MOVE_BLUE,
+    READY_ARM,
+    DELIVER_TO_STORAGE
 };
 
 enum class Event {

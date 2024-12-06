@@ -24,23 +24,33 @@
 #define RED_X 99.5 + 36 //红色方块在车上的x坐标
 #define RED_Y 106 - 30 //ok
 #define CAM_ANGLE_RED 3.1415//ok 
-#define GREEN_X 99.5 + 30//ok
-#define GREEN_Y 199 - 26//ok
-#define CAM_ANGLE_GREEN 2.955//ok
-#define BULE_X -20
-#define BULE_Y 199-60
-#define CAM_ANGLE_BLUE 3.1415
+#define CAM_ANGLE_BLUE 3.1415 //ok
+#define BULE_X 99.5 + 30//ok
+#define BULE_Y 199 - 26//ok
+#define CAM_ANGLE_GREEN 3.2
+#define GREEN_X 99.5 + 37
+#define GREEN_Y -4
 #define CAR_HIGHT 0.2 //快在车上的高度
-#define TEKEUP_HEIGHT -61 //从车上拿起的高度
+#define TEKEUP_HEIGHT -62 //从车上拿起的高度
 
-#define CIRCULAR_RED_X 40  //圆相对与车的x坐标
-#define CIRCULAR_RED_Y -230
-#define CIRCULAR_RED_CAM_ANGLE 3.1415 + 0.3
-#define CIRCULAR_GREEN_X -250
-#define CIRCULAR_GREEN_Y -230
-#define CIRCULAR_GREEN_CAM_ANGLE 3.1415 +0.3
-#define CIRCULAR_BLUE_X -130
+// #define CIRCULAR_RED_X 40  //圆相对与车的x坐标
+// #define CIRCULAR_RED_Y -230
+// #define CIRCULAR_RED_CAM_ANGLE 3.1415 + 0.3
+// #define CIRCULAR_GREEN_X -250
+// #define CIRCULAR_GREEN_Y -230
+// #define CIRCULAR_GREEN_CAM_ANGLE 3.1415 +0.3
+// #define CIRCULAR_BLUE_X -130
+// #define CIRCULAR_BLUE_Y -230
+// #define CIRCULAR_BLUE_CAM_ANGLE 3.1415+0.3
+
+#define CIRCULAR_BLUE_X 40  //圆相对与车的x坐标
 #define CIRCULAR_BLUE_Y -230
+#define CIRCULAR_RED_CAM_ANGLE 3.1415 + 0.3
+#define CIRCULAR_RED_X -250
+#define CIRCULAR_RED_Y -230
+#define CIRCULAR_GREEN_CAM_ANGLE 3.1415 +0.3
+#define CIRCULAR_GREEN_X -130
+#define CIRCULAR_GREEN_Y -230
 #define CIRCULAR_BLUE_CAM_ANGLE 3.1415+0.3
 #define CIRCULAR_HEIGHT 0.5 //圆在地上的高度 
 
@@ -105,8 +115,10 @@ public:
 
 
     void choose (char color);
+    void pickup(char color);
     void put_down(char color);
     void test();
+    void test2();
     void handle_move_blue();
     void handle_move_green();
     int test_vision(char color);

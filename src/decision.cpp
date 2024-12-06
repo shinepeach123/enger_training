@@ -29,6 +29,7 @@ int main(int argc, char **argv) {
     //fsm.set_state(State::TEST);
     while(ros::ok()){
         fsm.processEvent(Event::BATCH_DELIVERED);
+        pub_target_pose.pose.pose.position.z =  can_move;
         tar_pose_pub.publish(pub_target_pose);
         ros::spinOnce();
         rate.sleep();

@@ -15,7 +15,7 @@ struct set_target_poses {
 extern std::vector<set_target_poses> set_tar_poses;
 extern bool cur_pose_is_ok;
 extern bool yaw_is_ok;
-
+extern bool yaw_is_ok_for_circular ;
 
 nav_msgs::Odometry trans_global2car(const nav_msgs::Odometry& target_pose, const nav_msgs::Odometry& cur_pose, double target_yaw);
 int add_tar_pose(float x, float y, float yaw);
