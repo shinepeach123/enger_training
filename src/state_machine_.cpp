@@ -26,6 +26,9 @@ nav_msgs::Odometry lock_pose;
 int lock_flag = 0;
 int cir_index;
 
+int found_color = 0;
+int arm_ctrl_num = 0;
+
 void move_stop () {
     can_move = 0;
 }
@@ -110,25 +113,26 @@ void RobotFSM::processEvent(Event event) {
             robot_arm_.test();
             
             //currentState = State::DELIVER_TO_PROCESSING;
-            currentState = State::DELIVER_TO_PROCESSING;
+
+            currentState = State::DELIVER_TO_STORAGE;
             
             break;
         case State::DELIVER_TO_PROCESSING://2、开到粗加工区s
             move_start();
            if (add_flag != 1) {
             move_index = add_tar_pose(0.29, -0.29, 0);
-            ROS_INFO("move_index111: %d", move_index);
+            //ROS_INFO("move_index111: %d", move_index);
             add_tar_pose(0.29, -0.2, 0);
             add_tar_pose(0.8, -0.2, 0);
             add_tar_pose(1.3, -0.2, 0);
-            ROS_INFO("move_index2222: %d", move_index);
+            //ROS_INFO("move_index2222: %d", move_index);
             add_tar_pose(1.85, -0.29, 0);
             cir_index = add_tar_pose(1.91,-0.86,-0.01); //succ
-            ROS_INFO("circleindex = %d",cir_index);
+            //ROS_INFO("circleindex = %d",cir_index);
             add_flag = 1;
             }
             move(move_index);
-            ROS_INFO("move_index: %d", move_index);
+            //ROS_INFO("move_index: %d", move_index);
             if (car_arrive(move_index)) {
                 if(move_index == cir_index) {
                     if (car_arrive_circular(cir_index)) {
@@ -138,14 +142,14 @@ void RobotFSM::processEvent(Event event) {
                     move_index ++;
                 }
                 
-                ROS_INFO("move_index: %d", move_index);
+                //ROS_INFO("move_index: %d", move_index);
             } 
             if(move_index == set_tar_poses.size()) {
 
                 add_flag = 0;
                 currentState = State::READY_ARM;
                 move_lock();
-                ROS_INFO("test finish!");
+                ROS_INFO("DELIVER_TO_PROCESSING finish!");
             }
             break;
         case State::READY_ARM:
@@ -188,17 +192,28 @@ void RobotFSM::processEvent(Event event) {
             add_tar_pose(1.85,-1.88,0);
             add_tar_pose(1.64,-1.81,-3.1415/2);
             add_tar_pose(0.98,-1.84,-3.1415/2);
-            add_tar_pose(0.98,-1.84,-3.1415/2);
+            cir_index = add_tar_pose(1.14,-1.78,-3.1415/2);
+            add_flag = 1;
             }
+
             move(move_index);
-            ROS_INFO("move_index: %d", move_index);
+            //ROS_INFO("move_index: %d", move_index);
             if (car_arrive(move_index)) {
-                move_index ++;
-                ROS_INFO("move_index: %d", move_index);
+                if(move_index == cir_index) {
+                    if (car_arrive_circular(cir_index)) {
+                        move_index ++;
+                    }
+                }else {
+                    move_index ++;
+                }
+                
+                //ROS_INFO("move_index: %d", move_index);
             } 
             if(move_index == set_tar_poses.size()) {
                 add_flag = 0;
                 currentState = State::READY_ARM;
+                found_color =0;
+                arm_ctrl_num = 0;
                 move_stop();
                 ROS_INFO("test finish!");
             }
@@ -293,19 +308,17 @@ void RobotFSM::handle_move_blue(){
 
 
 void RobotFSM::handleTest_vision(Event event){
-    static int found_color = 0;
-    static int arm_ctrl = 0;
     if(found_color == 1){
-        arm_ctrl = 1;
+        arm_ctrl_num = 1;
     }
     if(found_color == 2){
-        arm_ctrl = 2;
+        arm_ctrl_num = 2;
     }
     if(found_color == 3){
-        arm_ctrl = 3;
+        arm_ctrl_num = 3;
     }
     //ROS_INFO("color_found = %d",arm_ctrl);
-    switch (arm_ctrl) {
+    switch (arm_ctrl_num) {
         case 0:
             found_color =robot_arm_.test_vision('b');
             if(found_color == 1){
@@ -319,10 +332,10 @@ void RobotFSM::handleTest_vision(Event event){
             }
         break;
         case 2:
-            arm_ctrl =robot_arm_.test_vision('r');
-            if(found_color == 3){
-                currentState = State::COMPLETE;
-            }
+            // arm_ctrl =robot_arm_.test_vision('r');
+            // if(found_color == 3){
+            //     //currentState = State::COMPLETE;
+            // }
         break;
         case 3:
         break;
@@ -363,123 +376,118 @@ void RobotFSM::handleReadQRCode(Event event) {
     }
 }
 
-void RobotFSM::handleFetchFirstBatch(Event event) {
+// void RobotFSM::handleDeliverToProcessing(Event event) { //步骤2，移动到粗加工区
+//     static int move_index;
+//     static int add_flag = 0;
+//     move_start();
 
-        currentState = State::DELIVER_TO_PROCESSING;
-}
-
-void RobotFSM::handleDeliverToProcessing(Event event) { //步骤2，移动到粗加工区
-    static int move_index;
-    static int add_flag = 0;
-    move_start();
-
-    // robot_arm_.test();
+//     // robot_arm_.test();
 
 
-    if (add_flag != 1) {
-    move_index = add_tar_pose(0.29, -0.29, 0);
-    ROS_INFO("move_index111: %d", move_index);
+//     if (add_flag != 1) {
+//     move_index = add_tar_pose(0.29, -0.29, 0);
+//     ROS_INFO("move_index111: %d", move_index);
      
-    add_tar_pose(0.29, -0.2, 0);
+//     add_tar_pose(0.29, -0.2, 0);
      
-    add_tar_pose(0.8, -0.2, 0);
-    add_tar_pose(1.3, -0.2, 0);
+//     add_tar_pose(0.8, -0.2, 0);
+//     add_tar_pose(1.3, -0.2, 0);
 
-    //add_tar_pose(0, 0, 0);
-    ROS_INFO("move_index2222: %d", move_index);
+//     //add_tar_pose(0, 0, 0);
+//     ROS_INFO("move_index2222: %d", move_index);
     
     
-    add_tar_pose(1.85, -0.29, 0);
+//     add_tar_pose(1.85, -0.29, 0);
 
-    add_tar_pose(1.88,-0.92,-0.01); //succ
+//     add_tar_pose(1.88,-0.92,-0.01); //succ
 
-    // add_tar_pose(1.85,-1.88,0);
-    // add_tar_pose(1.64,-1.81,-3.1415/2);
-    // add_tar_pose(0.98,-1.84,-3.1415/2);
-    // add_tar_pose(0.98,-1.84,-3.1415/2);
-    // add_tar_pose(0.84,-1.78,-3.1415/2);
-    // add_tar_pose(0.84,-1.6,-3.1415/2);
-    //  add_tar_pose(0.84,-1,-3.1415/2);
-    // add_tar_pose(0.88,-0.16,-3.1415/2);
-    // add_tar_pose(0.2,-0.2,-3.1415/2);
-    // add_tar_pose(0.2,-0.2,0);
-    // add_tar_pose(0,-0,0);
+//     // add_tar_pose(1.85,-1.88,0);
+//     // add_tar_pose(1.64,-1.81,-3.1415/2);
+//     // add_tar_pose(0.98,-1.84,-3.1415/2);
+//     // add_tar_pose(0.98,-1.84,-3.1415/2);
+//     // add_tar_pose(0.84,-1.78,-3.1415/2);
+//     // add_tar_pose(0.84,-1.6,-3.1415/2);
+//     //  add_tar_pose(0.84,-1,-3.1415/2);
+//     // add_tar_pose(0.88,-0.16,-3.1415/2);
+//     // add_tar_pose(0.2,-0.2,-3.1415/2);
+//     // add_tar_pose(0.2,-0.2,0);
+//     // add_tar_pose(0,-0,0);
 
-    add_flag = 1;
-    }
-    //add_tar_pose(0.2,0.2, 3.1415);//TODO 输入正确的坐标
-    move(move_index);
-    ROS_INFO("move_index: %d", move_index);
-    if (car_arrive(move_index)) {
-        move_index ++;
-        ROS_INFO("move_index: %d", move_index);
-    } 
-    if(move_index == set_tar_poses.size()) {
-        add_flag = 0;
-        currentState = State::READY_ARM;
-        move_stop();
-        ROS_INFO("test finish!");
-    }
-}
+//     add_flag = 1;
+//     }
+//     //add_tar_pose(0.2,0.2, 3.1415);//TODO 输入正确的坐标
+//     move(move_index);
+//     ROS_INFO("move_index: %d", move_index);
+//     if (car_arrive(move_index)) {
+//         move_index ++;
+//         ROS_INFO("move_index: %d", move_index);
+//     } 
+//     if(move_index == set_tar_poses.size()) {
+//         add_flag = 0;
+//         currentState = State::READY_ARM;
+//         move_stop();
+//         ROS_INFO("test finish!");
+//     }
+//}
 
-void RobotFSM::handleStoreFirstBatch(Event event) {
-    // if (event == Event::BATCH_STORED) {
+// void RobotFSM::handleStoreFirstBatch(Event event) {
+//     // if (event == Event::BATCH_STORED) {
     
         
-        //robot_arm_.choose('r');
-        robot_arm_.put_down('r');
-        robot_arm_.put_down('g');
-         robot_arm_.put_down('b');
-         //robot_arm_.put_down('g');
-        // robot_arm_.put_down('r');
-        // robot_arm_.choose('g');
-        // robot_arm_.put_down('g');
-        // robot_arm_.choose('b');
-        // robot_arm_.put_down('b');
+//         //robot_arm_.choose('r');
+//         robot_arm_.put_down('r');
+//         robot_arm_.put_down('g');
+//          robot_arm_.put_down('b');
+//          //robot_arm_.put_down('g');
+//         // robot_arm_.put_down('r');
+//         // robot_arm_.choose('g');
+//         // robot_arm_.put_down('g');
+//         // robot_arm_.choose('b');
+//         // robot_arm_.put_down('b');
 
 
 
-        //int temp_index = 0;
-        //temp_index = add_tar_pose(2, 2, 3.1415);//红原前面的坐标
-        //move(temp_index);
-        //robot_arm_.choose('b');
-        //robot_arm_.put_down('g''r');
-        //temp_index = add_tar_pose(2, 2, 3.1415);//蓝原前面的坐标
-        //move(temp_index);
-        //robot_arm_.choose('g');
-        //robot_arm_.put_down('b''r');
-        //temp_index = add_tar_pose(2, 2, 3.1415);//绿原前面的坐标
-        //move(temp_index);
+//         //int temp_index = 0;
+//         //temp_index = add_tar_pose(2, 2, 3.1415);//红原前面的坐标
+//         //move(temp_index);
+//         //robot_arm_.choose('b');
+//         //robot_arm_.put_down('g''r');
+//         //temp_index = add_tar_pose(2, 2, 3.1415);//蓝原前面的坐标
+//         //move(temp_index);
+//         //robot_arm_.choose('g');
+//         //robot_arm_.put_down('b''r');
+//         //temp_index = add_tar_pose(2, 2, 3.1415);//绿原前面的坐标
+//         //move(temp_index);
 
         
-        currentState = State::COMPLETE;
+//         currentState = State::COMPLETE;
 
-        //currentState = State::FETCH_SECOND_BATCH;
-        ROS_INFO("Fetching second batch of materials.");
-    // }
-    // currentState = State::COMPLETE;
-}
+//         //currentState = State::FETCH_SECOND_BATCH;
+//         ROS_INFO("Fetching second batch of materials.");
+//     // }
+//     // currentState = State::COMPLETE;
+// }
 
-void RobotFSM::handleFetchSecondBatch(Event event) {
-    if (event == Event::BATCH_FETCHED) {
-        currentState = State::DELIVER_TO_PROCESSING;
-        ROS_INFO("Delivering second batch to processing area.");
-    }
-}
+// void RobotFSM::handleFetchSecondBatch(Event event) {
+//     if (event == Event::BATCH_FETCHED) {
+//         currentState = State::DELIVER_TO_PROCESSING;
+//         ROS_INFO("Delivering second batch to processing area.");
+//     }
+// }
 
-void RobotFSM::handleStoreSecondBatch(Event event) {
-    if (event == Event::BATCH_STORED) {
-        currentState = State::RETURN_TO_START;
-        ROS_INFO("Returning to start.");
-    }
-}
+// void RobotFSM::handleStoreSecondBatch(Event event) {
+//     if (event == Event::BATCH_STORED) {
+//         currentState = State::RETURN_TO_START;
+//         ROS_INFO("Returning to start.");
+//     }
+// }
 
-void RobotFSM::handleReturnToStart(Event event) {
-    if (event == Event::RETURNED_TO_START) {
-        currentState = State::COMPLETE;
-        ROS_INFO("Task complete.");
-    }
-}
+// void RobotFSM::handleReturnToStart(Event event) {
+//     if (event == Event::RETURNED_TO_START) {
+//         currentState = State::COMPLETE;
+//         ROS_INFO("Task complete.");
+//     }
+// }
 
 void RobotFSM::handleComplete(Event event) {
     // Task is complete, no further action needed

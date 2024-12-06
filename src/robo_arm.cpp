@@ -396,8 +396,8 @@ void RobotArm::pickup (char color) {
         
     } else if (color == 'b') {
         ROS_INFO("PICKUP BLUE");
-        temp_index = add_arm_pose(blue_circle.x, blue_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
-        add_arm_pose(blue_circle.x, blue_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        temp_index = //add_arm_pose(blue_circle.x, blue_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
+        //add_arm_pose(blue_circle.x, blue_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_OPEN);
         add_arm_pose(blue_circle.x, blue_circle.y, -170, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
         add_arm_pose(blue_circle.x, blue_circle.y, -1, CIRCULAR_RED_CAM_ANGLE, PAW_CLOSE);
         add_arm_pose(BULE_X, BULE_Y, -1, CAM_ANGLE_RED, PAW_CLOSE);
@@ -544,7 +544,7 @@ void RobotArm::put_down(char color){
         //if (arm_arrived(arm_control[temp_index])){
         arm_pose_pub (temp_index);
         temp_index ++;
-        ROS_INFO("choose index %d",temp_index);
+        //ROS_INFO("choose index %d",temp_index);
         //}
         ros::Duration(arm_control[temp_index-1].temp_time).sleep();
     }
@@ -565,14 +565,14 @@ int RobotArm::add_arm_pose(float x, float y, float z, float cam_angle, float paw
     //this temp this temp this temp this temp this temp this temp this temp this temp
     double last_z = arm_control.back().z;
     if (fabs(last_z - z) != 0) {
-        temp_pose.temp_time = 0.06 * fabs(last_z - z);
+        temp_pose.temp_time = 0.045 * fabs(last_z - z);
         if(temp_pose.temp_time < 2) {
             temp_pose.temp_time = 2;
         }
     } else {
         temp_pose.temp_time = 2;
     }
-    ROS_INFO("temp_time %f",temp_pose.temp_time);
+    //ROS_INFO("temp_time %f",temp_pose.temp_time);
     //this temp this temp this temp this temp this temp this temp this temp this temp
 
     arm_control.push_back(temp_pose);
